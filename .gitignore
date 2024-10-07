@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### 오라클 DB ###
+src/main/resources/application.properties
+./Wallet_SATGATBASE
