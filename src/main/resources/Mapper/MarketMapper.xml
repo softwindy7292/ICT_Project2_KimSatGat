@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ict.ex.Mapper.MarketMapper">
+	<!-- 이 태그는 매퍼 파일의 루트 태그로, MyBatis가 이 XML 파일을 해당 네임스페이스(edu.ict.ex.mapper.MarketMapper)에 
+		연결한다는 것을 의미 -->
+
+	<resultMap id="marketResultMap" type="edu.ict.ex.VO.infomarketVO">
+		<id property="market_code" 		column="market_code" />
+		<result property="market_name" column="market_name" />
+		<result property="market_type" column="market_type" />
+		<result property="market_address" column="market_address" />
+		<result property="area_code" column="area_code" />
+		<result property="mrk_open_type" column="mrk_open_type" />
+		<result property="open_1" column="open_1" />
+		<result property="open_2" column="open_2" />
+		<result property="ark_yn" column="ark_yn" />
+		<result property="elb_yn" column="elb_yn" />
+		<result property="cus_yn" column="cus_yn" />
+		<result property="spr_yn" column="spr_yn" />
+		<result property="fire_yn" column="fire_yn" />
+		<result property="child_yn" column="child_yn" />
+		<result property="call_yn" column="call_yn" />
+		<result property="hyu_yn" column="hyu_yn" />
+		<result property="mo_yn" column="mo_yn" />
+		<result property="mulpum_yn" column="mulpum_yn" />
+		<result property="cycle_yn" column="cycle_yn" />
+		<result property="play_yn" column="play_yn" />
+		<result property="book_yn" column="book_yn" />
+		<result property="cart_yn" column="cart_yn" />
+		<result property="frgn_yn" column="frgn_yn" />
+		<result property="road_yn" column="road_yn" />
+		<result property="broad_yn" column="broad_yn" />
+		<result property="culture_yn" column="culture_yn" />
+		<result property="cargo_yn" column="cargo_yn" />
+		<result property="parking_yn" column="parking_yn" />
+		<result property="edu_yn" column="edu_yn" />
+		<result property="meeting_yn" column="meeting_yn" />
+		<result property="heart_yn" column="heart_yn" />
+		<result property="toilet_yn" column="toilet_yn" />
+		<result property="wido" column="wido" />
+		<result property="gyungdo" column="gyungdo" />
+		<result property="shop_cnt" column="shop_cnt" />
+		<result property="homepage" column="homepage" />
+		<result property="open_year" column="open_year" />
+		<result property="tel_no" column="tel_no" />
+		<result property="area_name" column="area_name" />
+		<result property="open_type_name" column="open_type_name" />
+		<result property="mrk_open_date" column="mrk_open_date" />
+		<result property="st_area_code" column="st_area_code" />
+		<result property="end_area_code" column="end_area_code" />
+		<result property="st_mrk_open_type" column="st_mrk_open_type" />
+		<result property="end_mrk_open_type" column="end_mrk_open_type" />
+	</resultMap>
+
+	<select id="searchMarketList" resultMap="marketResultMap">
+ 		<![CDATA[
+		select a.*,
+    		(select code_value_cmmt from codeval where code_value = a.area_code and code_type = 'C201') area_name,
+    		(select code_value_cmmt from codeval where code_value = a.mrk_open_type and code_type = 'C102') open_type_name,
+        		case a.mrk_open_type when 1 then '(없음)' else ( a.open_1 || '일,' || a.open_2 || '일') end as mrk_open_date
+        from infomarket a
+        	where (a.area_code >= #{st_area_code} and a.area_code <= #{end_area_code}
+        	and a.mrk_open_type >= #{st_mrk_open_type} and a.mrk_open_type <= #{end_mrk_open_type})
+        	or (a.market_name like '%' || #{market_name} || '%')
+        	order by a.market_code, a.area_code, a.market_name
+		]]> 
+		
+
+	</select>
+
+
+
+	<select id="getMarketList" resultMap="marketResultMap">
+		<![CDATA[
+    		SELECT * FROM INFOMARKET
+    	]]>
+	</select>
+
+	<select id="getTotalCount" resultType="int">
+		<![CDATA[
+			SELECT COUNT(*) FROM INFOMARKET
+		]]>
+	</select>
+
+	<select id="getMarketMap" resultMap="marketResultMap">
+		<![CDATA[
+			SELECT * FROM INFOMARKET WHERE market_code = #{market_code}
+		]]>
+	</select>
+
+
+	<select id="getMarketDetail" resultMap="marketResultMap">
+		<![CDATA[
+			SELECT * FROM INFOMARKET WHERE market_code = #{market_code}
+		]]>
+	</select>
+
+	<select id="searchMarket" parameterType="String"
+		resultMap="marketResultMap">
+		<![CDATA[
+			SELECT * FROM INFOMARKET
+			WHERE market_name LIKE '%' || #{keyword} || '%'
+			OR market_address LIKE '%' || #{keyword} || '%'
+		]]>
+
+	</select>
+
+	<update id="updateMarket">
+		<![CDATA[
+			UPDATE INFOMARKET
+			SET market_name = #{market_name},
+			market_address = #{market_address},
+			tel_no = #{tel_no}
+			WHERE market_code = #{market_code}
+		]]>
+	</update>
+
+	<insert id="createMarket">
+		<![CDATA[
+			INSERT INTO infomarket (market_code, area_code, market_name, market_address,tel_no,market_type,mrk_open_type,open_1,open_2)
+			VALUES (#{market_code}, #{area_code}, #{market_name}, #{market_address},#{tel_no},#{market_type},
+			#{mrk_open_type}, #{open_1}, #{open_2})
+		]]>
+	</insert>
+
+	<delete id="deleteMarket">
+		<![CDATA[
+			DELETE FROM infomarket WHERE market_code = #{market_code}
+		]]>
+	</delete>
+
+</mapper>

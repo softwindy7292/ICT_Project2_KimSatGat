@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>공지사항</title>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" />
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/js/notice.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		let searchParams = new URLSearchParams(window.location.search)
+
+		let notice_id = searchParams.get('notice_id')
+
+		function getNotice(notice) {
+			$('#title').append(notice.title);
+			$('#notice_id').append(notice.notice_id);
+			$('#name').append(notice.name);
+			$('#create_date').append(notice.create_date);
+			$('#content').append(notice.content);
+		}
+
+		let notice = noticeService();
+
+		notice.getNotice(notice_id, getNotice);
+
+	});
+</script>
+<style>
+body {
+	font-family: "Noto Sans KR", sans-serif;
+	background: #f0f4f8;
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+header {
+	background: linear-gradient(135deg, #4a90e2 0%, #d0e2ff 100%);
+	color: black;
+	padding: 20px 0;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#mainText {
+	font-size: 2.5rem;
+	margin-bottom: 10px;
+	color: white;
+}
+
+.navbar {
+	background: rgba(0, 0, 0, 0.8);
+}
+
+.navbar-nav .nav-link {
+	font-size: 1.15rem;
+	font-weight: 600;
+	margin: 0 15px;
+	color: white;
+	transition: color 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+	color: #c3cfe2;
+}
+
+.btn-outline-light {
+	border: 2px solid #fff;
+	color: #fff;
+	font-weight: 600;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-outline-light:hover {
+	background-color: #fff;
+	color: #000;
+}
+
+.auth-buttons {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}
+
+footer {
+	background-color: #000;
+	color: white;
+	padding: 20px 0;
+	margin-top: auto;
+	width: 100%;
+	box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+}
+
+footer a {
+	color: #fff;
+	transition: color 0.3s;
+}
+
+footer a:hover {
+	color: #c3cfe2;
+}
+</style>
+<style>
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+
+th {
+	background-color: #f2f2f2;
+}
+
+tr {
+	transition: background-color 0.3s;
+}
+
+tr:hover {
+	background-color: #f1f1f1;
+}
+</style>
+</head>
+<body>
+	<div class="header-nav-container">
+		<header>
+			<div class="container position-relative">
+				<div
+					class="d-flex flex-column justify-content-center align-items-center">
+					<h1 id="mainText">전통시장 관광지 검색 사이트</h1>
+				</div>
+
+				<div class="auth-buttons">
+					<span>환영합니다</span>
+					<a class="btn btn-outline-light me-2" href="/logout">로그아웃</a>
+				</div>
+			</div>
+		</header>
+
+		<nav class="navbar navbar-expand-lg">
+			<div class="container-fluid">
+				<button class="navbar-toggler" type="button"
+					data-bs-toggle="collapse" data-bs-target="#navbarNav"
+					aria-controls="navbarNav" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse justify-content-center"
+					id="navbarNav">
+					<ul class="navbar-nav">
+						<li class="nav-item"><a class="nav-link" aria-current="page"
+							href="main.html"><i class="fas fa-home"></i>
+								홈</a></li>
+						<li class="nav-item"><a class="nav-link" href="/market/market"><i
+								class="fas fa-shopping-basket"></i> 시장정보찾기</a></li>
+						<li class="nav-item"><a class="nav-link" href="/usertour/userlist"><i
+								class="fas fa-map-signs"></i> 관광지정보찾기</a></li>
+						<li class="nav-item"><a class="nav-link"
+							href="userNoticeBoardList.html"><i
+								class="fas fa-bell"></i> 공지사항</a></li>
+						<li class="nav-item"><a class="nav-link" href="myInfo.html"><i
+								class="fas fa-user"></i> 마이페이지</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+	
+	<div class="container text-center">
+		<h1 id="title" class="m-4"></h1>
+		<p id="notice_id" type="hidden"></p>
+		<p id="name"></p>
+		<p id="create_date"></p>
+		<p id="content"></p>
+	</div>
+	<footer class="text-center">
+		<div class="container">
+			<p>&copy; 2024 전통시장. 모든 권리 보유.</p>
+			<a href="#terms">이용약관</a> | <a href="#privacy">개인정보 처리방침</a>
+		</div>
+	</footer>
+</body>
+</html>

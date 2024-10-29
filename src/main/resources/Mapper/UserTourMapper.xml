@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ict.ex.Mapper.UserTourMapper">
+
+	<resultMap id="userTourResultMap" type="edu.ict.ex.VO.UserTourVO">
+		<id property="tour_code" column="tour_code" />
+		<result property="tour_name" column="tour_name" />
+		<result property="tour_address" column="tour_address" />
+		<result property="tour_cmmt" column="tour_cmmt" />
+		<result property="tour_telno" column="tour_telno" />
+		<result property="custom_cnt" column="custom_cnt" />
+		<result property="car_cnt" column="car_cnt" />
+	</resultMap>
+
+    <!-- 사용자 투어 목록 조회 -->
+    <select id="getUserTourList" resultMap="userTourResultMap">
+        SELECT * FROM infotour
+    </select>
+
+    <!-- 사용자 투어 총 개수 조회 -->
+    <select id="getTotalCount" resultType="int">
+        SELECT COUNT(*) FROM infotour
+    </select>
+
+    <!-- 사용자 투어 상세 조회 -->
+    <select id="getUserTourDetail" resultMap="userTourResultMap">
+        SELECT * FROM infotour WHERE tour_code = #{tour_code}
+    </select>
+
+    <!-- 사용자 투어 검색 (tour_name, tour_address에서 키워드 검색) -->
+    <select id="searchUserTour" parameterType="String" resultMap="userTourResultMap">
+        SELECT * FROM infotour
+        WHERE tour_name LIKE '%' || #{keyword} || '%'
+        OR tour_address LIKE '%' || #{keyword} || '%'
+    </select>
+    
+</mapper>

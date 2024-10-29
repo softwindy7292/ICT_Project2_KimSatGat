@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ict.ex.Mapper.UserMapper">
+
+	<resultMap id="memberResultMap" type="edu.ict.ex.VO.membersVO">
+		<id property="id" column="id" />
+		<result property="passwd" column="passwd" />
+		<result property="member_gubun" column="member_gubun" />
+		<result property="manager_role" column="manager_role" />
+		<result property="status" column="status" />
+		<result property="name" column="name" />
+		<result property="birthday" column="birthday" />
+		<result property="telno" column="telno" />
+		<result property="email" column="email" />
+		<result property="create_date" column="create_date" />
+		<result property="last_change_id" column="last_change_id" />
+		<result property="last_change_date" column="last_change_date" />
+		<result property="expire_date" column="expire_date" />
+	</resultMap>
+
+	<select id="findByName" resultMap="memberResultMap">
+		<![CDATA[
+    		select * from members where id = #{id} order by create_date desc
+    	]]>
+	</select>
+
+	<select id="findByAccount" resultMap="memberResultMap">
+		<![CDATA[
+    		select * from members where id = #{id} order by create_date desc
+    	]]>
+	</select>
+	
+	<select id="existsByAccount" resultType="String">
+		<![CDATA[
+    		select * from members where id = #{id} order by create_date desc
+    	]]>
+	</select>
+	
+	<insert id="save">
+		<![CDATA[
+			INSERT INTO members (id, passwd, member_gubun, manager_role, status, name, birthday, telno, email, create_date)
+			VALUES (#{id}, #{passwd}, 2, 0, 1, #{name}, #{birthday}, #{telno}, #{email}, sysdate)
+		]]>
+	</insert>
+	
+	<!-- 마이페이지에서 수정 -->
+	
+	<update id="updateMember">
+    	<![CDATA[
+    		update members set name = #{name}, birthday = #{birthday}, telno = #{telno}, email = #{email} where id = #{id}
+    	]]>
+	</update>
+	
+	<!-- 아래는 유저관리 -->
+	
+	<select id="selectAllMember" resultMap="memberResultMap">
+		<![CDATA[
+    		select * from members order by create_date desc
+    	]]>
+	</select>
+	
+	<select id="selectMember" resultMap="memberResultMap">
+		<![CDATA[
+    		select * from members where id = #{id} order by create_date desc
+    	]]>
+	</select>
+	
+	<delete id="deleteMember">
+    	<![CDATA[
+    		delete from members where id = #{id}
+    	]]>
+	</delete>
+	
+</mapper>

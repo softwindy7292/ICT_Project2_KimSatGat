@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ict.ex.Mapper.TourMapper">
+
+	<resultMap id="tourResultMap" type="edu.ict.ex.VO.TourVO">
+		<id property="tour_code" column="tour_code" />
+		<result property="tour_name" column="tour_name" />
+		<result property="tour_address" column="tour_address" />
+		<result property="tour_cmmt" column="tour_cmmt" />
+		<result property="tour_telno" column="tour_telno" />
+		<result property="custom_cnt" column="custom_cnt" />
+		<result property="car_cnt" column="car_cnt" />
+		<result property="area_code" column="area_code" />
+	</resultMap>
+	
+    <select id="getTourList" resultMap="tourResultMap">
+        	SELECT * FROM infotour
+    </select>
+
+    <select id="getTotalCount" resultType="int">
+        SELECT COUNT(*) FROM infotour
+    </select>
+
+    <select id="getTourDetail" resultMap="tourResultMap">
+        SELECT * FROM infotour WHERE tour_code = #{tour_code}
+    </select>
+    
+   <select id="searchTour" parameterType="String" resultMap="tourResultMap">
+	    SELECT * FROM infotour 
+	    WHERE tour_name LIKE '%' || #{keyword} || '%' 
+	    OR tour_address LIKE '%' || #{keyword} || '%'
+	</select>
+
+
+    <update id="updateTour">
+        UPDATE infotour
+        SET tour_name = #{tour_name},
+            tour_address = #{tour_address},
+            tour_cmmt = #{tour_cmmt},
+            tour_telno = #{tour_telno},
+            custom_cnt = #{custom_cnt},
+            car_cnt = #{car_cnt}
+        WHERE tour_code = #{tour_code}
+    </update>
+    
+	 <insert id="createTour">
+	    INSERT INTO infotour (tour_code, area_code, tour_name, tour_address, tour_cmmt, tour_telno, custom_cnt, car_cnt,tour_wido,tour_gyungdo,tour_area)
+	    VALUES (#{tour_code}, 11, #{tour_name}, #{tour_address}, #{tour_cmmt}, #{tour_telno}, #{custom_cnt}, #{car_cnt},0,0,0)
+	</insert>
+
+
+    <delete id="deleteTour" parameterType="String">
+        DELETE FROM infotour WHERE tour_code = #{tour_code}
+    </delete>
+</mapper>

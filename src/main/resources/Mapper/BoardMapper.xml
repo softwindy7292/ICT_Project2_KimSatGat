@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ict.ex.Mapper.BoardMapper">
+
+	<resultMap id="noticeResultMap" type="edu.ict.ex.VO.noticeboardVO">
+		<id property="notice_id" column="notice_id" />
+		<result property="name" column="name" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="create_date" column="create_date" />
+		<result property="hit" column="hit" />
+	</resultMap>
+
+	<select id="selectAllNotice" resultMap="noticeResultMap">
+		<![CDATA[
+    		select * from noticeboard order by create_date desc
+    	]]>
+	</select>
+
+	<select id="selectNotice" resultMap="noticeResultMap">
+		<![CDATA[
+    		select * from noticeboard where notice_id = #{id}
+    	]]>
+	</select>
+	
+	<insert id="insertNotice">
+    	<![CDATA[
+    		insert into noticeboard (notice_id, name, title, content, hit) 
+    		values (notice_seq.nextval, #{name}, #{title}, #{content}, 0)
+    	]]>
+	</insert>
+	
+	<update id="updateNotice">
+    	<![CDATA[
+    		update noticeboard set title = #{title}, content = #{content} where notice_id = #{notice_id}
+    	]]>
+	</update>
+	
+	<delete id="deleteNotice">
+    	<![CDATA[
+    		delete from noticeboard where notice_id = #{id}
+    	]]>
+	</delete>
+	
+	<!-- 위는 공지사항 게시판 아래는 리뷰게시판 -->
+	
+	<resultMap id="reviewResultMap" type="edu.ict.ex.VO.reviewboardVO">
+		<id property="review_id" column="review_id" />
+		<result property="star" column="star" />
+		<result property="name" column="name" />
+		<result property="content" column="content" />
+		<result property="create_date" column="create_date" />
+		<result property="market_tour_code" column="market_tour_code" />
+	</resultMap>
+
+	<select id="selectAllReview" resultMap="reviewResultMap">
+		<![CDATA[
+    		select * from reviewboard where market_tour_code = #{code} order by create_date desc
+    	]]>
+	</select>
+
+	<select id="selectReview" resultMap="reviewResultMap">
+		<![CDATA[
+    		select * from reviewboard where review_id = #{id} order by create_date desc
+    	]]>
+	</select>
+	
+	<insert id="insertReview">
+    	<![CDATA[
+    		insert into reviewboard (review_id, star, name, content, market_tour_code) 
+    		values (review_seq.nextval, 10, #{name}, #{content}, #{market_tour_code})
+    	]]>
+	</insert>
+	
+	<update id="updateReview">
+    	<![CDATA[
+    		update reviewboard set star = #{star}, content = #{content} where review_id = #{review_id}
+    	]]>
+	</update>
+	
+	<delete id="deleteReview">
+    	<![CDATA[
+    		delete from reviewboard where review_id = #{id}
+    	]]>
+	</delete>
+	
+	<!-- 시장, 관광지 이름 가져오기 -->
+	
+	<resultMap id="reviewMResultMap" type="edu.ict.ex.JoinVO.reviewboardMNameVO">
+		<id property="review_id" column="review_id" />
+		<result property="star" column="star" />
+		<result property="name" column="name" />
+		<result property="content" column="content" />
+		<result property="create_date" column="create_date" />
+		<result property="market_tour_code" column="market_tour_code" />
+		<result property="market_name" column="market_name" />
+	</resultMap>
+	
+	<resultMap id="reviewTResultMap" type="edu.ict.ex.JoinVO.reviewboardTNameVO">
+		<id property="review_id" column="review_id" />
+		<result property="star" column="star" />
+		<result property="name" column="name" />
+		<result property="content" column="content" />
+		<result property="create_date" column="create_date" />
+		<result property="market_tour_code" column="market_tour_code" />
+		<result property="tour_name" column="tour_name" />
+	</resultMap>
+	
+	<select id="selectMyReviewM" resultMap="reviewMResultMap">
+		<![CDATA[
+    		select r.*, m.market_name from reviewboard r, infomarket m where name = #{id} and r.market_tour_code = m.market_code order by create_date desc
+    	]]>
+	</select>
+	
+	<select id="selectMyReviewT" resultMap="reviewTResultMap">
+		<![CDATA[
+    		select r.*, t.tour_name from reviewboard r, infotour t where name = #{id} and r.market_tour_code = t.tour_code order by create_date desc
+    	]]>
+	</select>
+</mapper>
